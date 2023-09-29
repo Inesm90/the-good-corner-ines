@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Length, ValidateIf } from "class-validator";
-import { Category } from "./category";
+import { Category } from "./Category";
 import { Tag } from "./Tag";
 
 @Entity()
@@ -17,14 +17,22 @@ export class Ad extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ length: 100 })
-  @Length(10, 100)
+  @Column()
   title!: string;
 
   @Column({ nullable: true })
   @Length(0, 5000)
   @ValidateIf((object, value) => !!value)
   description!: string;
+
+  @Column()
+  price!: number;
+
+  @Column()
+  imgUrl!: string;
+
+  @CreateDateColumn()
+  createdAt!: Date;
 
   @ManyToOne(() => Category, (category) => category.ads)
   category!: Category;
@@ -34,7 +42,4 @@ export class Ad extends BaseEntity {
   // pivot table won't be generated
   @JoinTable()
   tags!: Tag[];
-
-  @CreateDateColumn()
-  createdAt!: Date;
 }

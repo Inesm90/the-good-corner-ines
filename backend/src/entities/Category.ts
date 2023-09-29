@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Length } from "class-validator";
-import { Ad } from "./ad";
+import { Ad } from "./Ad";
 
 @Entity()
 export class Category extends BaseEntity {
@@ -14,7 +14,7 @@ export class Category extends BaseEntity {
   id!: number;
 
   @Column({ length: 100 })
-  @Length(10, 100)
+  @Length(2, 100)
   name!: string;
 
   @OneToMany(() => Ad, (ad) => ad.category)
