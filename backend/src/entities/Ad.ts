@@ -12,7 +12,7 @@ import { Length, ValidateIf, IsInt } from "class-validator";
 import { Category } from "./Category";
 import { Tag } from "./Tag";
 import { Field, ID, InputType, Int, ObjectType } from "type-graphql";
-import { ObjectId } from "./objedId";
+import { ObjectId } from "./ObjectId";
 
 @Entity()
 @ObjectType()
@@ -45,7 +45,7 @@ export class Ad extends BaseEntity {
   @Field(() => Category, { nullable: true })
   category!: Category;
 
-  @ManyToMany(() => Tag, (tag) => tag.ads)
+  @ManyToMany(() => Tag, (tag) => tag.ads, { cascade: ["remove"] })
   @JoinTable()
   @Field(() => [Tag])
   tags!: Tag[];
@@ -56,7 +56,7 @@ export class Ad extends BaseEntity {
 }
 
 @InputType()
-export class AdInput {
+export class AdCreateInput {
   @Field()
   title!: string;
 
@@ -69,9 +69,29 @@ export class AdInput {
   @Field()
   description!: string;
 
-  @Field(() => [ObjectId])
+  @Field()
   category!: ObjectId;
 
   @Field(() => [ObjectId])
+  tags!: ObjectId[];
+}
+  @InputType()
+export class AdUpdateInput {
+  @Field({ nullable: true })
+  title!: string;
+
+  @Field(() => Int, { nullable: true })
+  price!: number;
+
+  @Field({ nullable: true })
+  imgUrl!: string;
+
+  @Field({ nullable: true })
+  description!: string;
+
+  @Field({ nullable: true })
+  category!: ObjectId;
+
+  @Field(() => [ObjectId], { nullable: true })
   tags!: ObjectId[];
 }
