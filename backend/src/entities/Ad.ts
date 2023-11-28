@@ -95,3 +95,18 @@ export class AdUpdateInput {
   @Field(() => [ObjectId], { nullable: true })
   tags!: ObjectId[];
 }
+
+@InputType()
+export class AdsWhere {
+  @Field(() => [ID], { nullable: true })
+  categoryIn?: number[];
+
+  @Field(() => String, { nullable: true })
+  searchTitle?: string;
+
+  @Field(() => Int, { nullable: true })
+  priceGte?: number;
+
+  @Field(() => Int, { nullable: true })
+  priceLte?: number;
+}

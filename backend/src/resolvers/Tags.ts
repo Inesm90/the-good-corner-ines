@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver, ID } from "type-graphql";
+import { Arg, ID, Mutation, Query, Resolver } from "type-graphql";
 import { Tag, TagCreateInput, TagUpdateInput } from "../entities/Tag";
 import { validate } from "class-validator";
 
@@ -6,12 +6,10 @@ import { validate } from "class-validator";
 export class TagsResolver {
   @Query(() => [Tag])
   async allTags(): Promise<Tag[]> {
-    const tags = await Tag.find({
-      relations: { ads: true },
-    });
-    console.log(tags);
+    const tags = await Tag.find({ relations: { ads: true } });
     return tags;
   }
+
   @Query(() => Tag, { nullable: true })
   async tag(@Arg("id", () => ID) id: number): Promise<Tag | null> {
     const tag = await Tag.findOne({

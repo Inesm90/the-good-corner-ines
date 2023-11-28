@@ -1,5 +1,9 @@
-import { Arg, Mutation, Query, Resolver, ID } from "type-graphql";
-import { Category, CategoryCreateInput, CategoryUpdateInput } from "../entities/Category";
+import { Arg, ID, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Category,
+  CategoryCreateInput,
+  CategoryUpdateInput,
+} from "../entities/Category";
 import { validate } from "class-validator";
 
 @Resolver(Category)
@@ -20,7 +24,9 @@ export class CategoriesResolver {
   }
 
   @Mutation(() => Category)
-  async createCategory(@Arg("data", () => CategoryCreateInput) data: CategoryCreateInput): Promise<Category> {
+  async createCategory(
+    @Arg("data", () => CategoryCreateInput) data: CategoryCreateInput
+  ): Promise<Category> {
     const newCategory = new Category();
     Object.assign(newCategory, data);
 

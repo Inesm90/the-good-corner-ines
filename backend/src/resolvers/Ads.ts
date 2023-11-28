@@ -1,14 +1,41 @@
 import { Arg, Mutation, Query, Resolver, ID } from "type-graphql";
-import { Ad, AdCreateInput, AdUpdateInput } from "../entities/Ad";
+import { Ad, AdCreateInput, AdUpdateInput, AdsWhere } from "../entities/Ad";
 import { validate } from "class-validator";
 import { merge } from "../utils";
+import { In, Like, MoreThanOrEqual, LessThanOrEqual } from "typeorm";
 
 @Resolver(Ad)
 export class AdsResolver {
   @Query(() => [Ad])
-  async allAds(): Promise<Ad[]> {
-    const ads = await Ad.find({ relations: { category: true, tags: true } });
-    console.log(ads);
+  async allAds(
+    @Arg("where", { nullable: true }) where?: AdsWhere
+  ): Promise<Ad[]> {
+    const queryWhere: any = {};
+
+    if (where?.categoryIn) {
+      queryWhere.category = { id: In(where.categoryIn) };
+    }
+
+    if (where?.searchTitle) {
+      queryWhere.title = Like(`%${where.searchTitle}%`);
+    }
+
+    if (where?.priceGte) {
+      queryWhere.price = MoreThanOrEqual(Number(where.priceGte));
+    }
+
+    if (where?.priceLte) {
+      queryWhere.price = LessThanOrEqual(Number(where.priceLte));
+    }
+
+    const ads = await Ad.find({
+      where: queryWhere,
+      //order,
+      relations: {
+        category: true,
+        tags: true,
+      },
+    });
     return ads;
   }
 
@@ -22,7 +49,9 @@ export class AdsResolver {
   }
 
   @Mutation(() => Ad)
-  async createAd(@Arg("data", () => AdCreateInput) data: AdCreateInput): Promise<Ad> {
+  async createAd(
+    @Arg("data", () => AdCreateInput) data: AdCreateInput
+  ): Promise<Ad> {
     const newAd = new Ad();
     Object.assign(newAd, data);
 

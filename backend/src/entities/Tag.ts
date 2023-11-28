@@ -13,7 +13,7 @@ import { Field, ID, ObjectType, InputType } from "type-graphql";
 @Entity()
 export class Tag extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field(type => ID)
+  @Field(() => ID)
   id!: number;
 
   @Column({ length: 100 })
