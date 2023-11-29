@@ -1,8 +1,12 @@
 import Head from "next/head";
 import { Header } from "./Header";
-import { ReactNode } from "react";
 
-const Layout = ({ children }: { children: ReactNode }) => {
+type LayoutProps = {
+  children: React.ReactNode;
+  title: string;
+};
+
+export function Layout(props: LayoutProps): React.ReactNode {
     return (
         <>
         <Head>
@@ -13,10 +17,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         </Head>
         
         <Header/>
-        <main className="main-content">{children}</main>
-        
+        <main className="main-content">{props.children}</main>
         </>
     );
 };
-
-export default Layout;

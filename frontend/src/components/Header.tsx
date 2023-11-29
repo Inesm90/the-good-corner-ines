@@ -1,24 +1,23 @@
 import Link from "next/link";
 import React from "react"
 import { Category, CategoryType } from "./Categories";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { API_URL } from "@/config";
+import { useState } from "react";
 import { useRouter } from "next/router";
+import { useQuery } from "@apollo/client";
+import { queryAllCategories } from "@/graphql/queryAllCategories";
 
 export function Header(): React.ReactNode {
-  const [categories, setCategories] = useState<CategoryType[]>([]);
-
+  const [searchWord, setSearchWord] = useState("");
   const router = useRouter();
-
-  async function fetchCategories() {
-    const result = await axios.get<CategoryType[]>(API_URL + "/categories");
-    setCategories(result.data);
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    router.push(`/?searchWord=${searchWord.trim()}`);
   }
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  const { data, error, loading } = useQuery<{ items: CategoryType[] }>(
+    queryAllCategories
+  );
+  const categories = data ? data.items : [];
 
   return (
     <header className="header">
@@ -29,9 +28,14 @@ export function Header(): React.ReactNode {
             <span className="desktop-long-label">THE GOOD CORNER</span>
           </Link>
         </h1>
-        <form className="text-field-with-button">
-          <input className="text-field main-search-field" type="search" />
-          <button className="button button-primary">
+        <form className="text-field-with-button" onSubmit={onSubmit}>
+          <input
+            className="text-field main-search-field"
+            type="search"
+            value={searchWord}
+            onChange={(e) => setSearchWord(e.target.value)}
+          />
+          <button className="button button-primary" type="submit">
             <svg
               aria-hidden="true"
               width="16"
@@ -50,14 +54,15 @@ export function Header(): React.ReactNode {
           <span className="desktop-long-label">Publier une annonce</span>
         </Link>
       </div>
-      <Link href="/categories/[id]" className="categories-navigation">
-      {categories.map((category, index) => (
+      <nav className="categories-navigation">
+        {loading === true && <p>Chargement</p>}
+        {categories.map((category, index) => (
           <React.Fragment key={category.id}>
             <Category name={category.name} id={category.id} />{" "}
             {index < categories.length - 1 && "•"}
-          </React.Fragment>    
-            ))}
-      </Link>
+          </React.Fragment>
+        ))}
+      </nav>
     </header>
   );
 }

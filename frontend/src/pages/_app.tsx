@@ -1,15 +1,19 @@
 import "@/styles/globals.css";
-import Layout from "@/components/Layout";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 
+const client = new ApolloClient({
+  uri: "http://localhost:3000",
+  cache: new InMemoryCache(),
+});
+
 function App({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
+    <ApolloProvider client={client}>
       <Component {...pageProps} />
-  </Layout>
+    </ApolloProvider>
   );
 }
 
-// Disabling SSR
 export default dynamic(() => Promise.resolve(App), { ssr: false });
