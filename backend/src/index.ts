@@ -9,7 +9,7 @@ import { dataSource } from "./datasource";
 
 async function start() {
 const schema = await buildSchema({
-  resolvers : [TagsResolver, CategoriesResolver, AdsResolver]
+  resolvers : [AdsResolver, TagsResolver, CategoriesResolver]
 });
 
 const server = new ApolloServer({

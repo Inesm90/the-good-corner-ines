@@ -30,7 +30,7 @@ export class AdsResolver {
 
     const ads = await Ad.find({
       where: queryWhere,
-      //order,
+
       relations: {
         category: true,
         tags: true,
