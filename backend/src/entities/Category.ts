@@ -17,7 +17,7 @@ export class Category extends BaseEntity {
   id!: number;
 
   @Column({ length: 100 })
-  @Length(10, 100)
+  @Length(5, 100)
   @Field()
   name!: string;
 

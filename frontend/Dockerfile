@@ -12,5 +12,6 @@ COPY public public
 COPY next.config.js next.config.js
 COPY .eslintrc.json .eslintrc.json 
 COPY next-env.d.ts next-env.d.ts
+RUN npm run build
 
-CMD npm run dev
+CMD npm start

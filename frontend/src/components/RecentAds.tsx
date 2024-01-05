@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AdCard, AdType } from "./AdCard";
 import { gql, useQuery } from "@apollo/client";
 
