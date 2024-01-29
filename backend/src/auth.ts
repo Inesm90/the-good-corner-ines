@@ -10,14 +10,14 @@ export type ContextType = {
 };
 
 export const customAuthChecker: AuthChecker<ContextType> = async (
-  { root, args, context, info },
+  { context },
   roles
 ) => {
   const cookies = new Cookies(context.req, context.res);
   const token = cookies.get("token");
 
   if (!token) {
-    console.error("missing token");
+    console.error("Missing token");
     return false;
   }
 
@@ -31,15 +31,15 @@ export const customAuthChecker: AuthChecker<ContextType> = async (
         context.user = Object.assign(user, { hashedPassword: undefined });
         return true;
       } else {
-        console.error("user not found");
+        console.error("User not found");
         return false;
       }
     } else {
-      console.error("invalid token, msising userId");
+      console.error("Invalid token, msising userId");
       return false;
     }
   } catch {
-    console.error("invalid token");
+    console.error("Invalid token");
     return false;
   }
 };

@@ -105,65 +105,78 @@ export default function AdForm(props: AdFormProps) {
   return (
     <Layout title="Nouvelle offre">
       <main className="main-content">
-        <p>{props.ad ? "Modifier l'offre" : "Nouvelle offre"}</p>
-        {error === "price" && <p>Le prix doit être positif</p>}
-        {error === "title" && (
-          <p>Le titre est requis et doit faire plus de 3 caractères</p>
-        )}
-        <form onSubmit={onSubmit}>
-          <input
-            type="text"
-            name="title"
-            placeholder="Titre de l'annonce"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <br />
-          <br />
-          <input
-            type="text"
-            name="description"
-            placeholder="Description de l'annonce"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <br />
-          <br />
-          <input
-            type="text"
-            name="imgUrl"
-            placeholder="Lien de l'image"
-            value={imgUrl}
-            onChange={(e) => setImgUrl(e.target.value)}
-          />
-          <br />
-          <br />
-          <input
-            type="number"
-            name="price"
-            placeholder="0,00€"
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
-          />
-          <br />
-          <br />
-          <select
-            name="categoryId"
-            value={categoryId + ""}
-            onChange={(e) => setCategoryId(Number(e.target.value))}
-          >
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-          <br />
-          <br />
-          <button type="submit" disabled={loading}>
-            {props.ad ? "Modifier" : "Créer"}
-          </button>
-        </form>
+        <div className="signup-container">
+          <p>{props.ad ? "Modifier l'offre" : "Nouvelle offre"}</p>
+          {error === "price" && (
+            <p className="error-message">Le prix doit être positif</p>
+          )}
+          {error === "title" && (
+            <p className="error-message">
+              Le titre est requis et doit faire plus de 3 caractères
+            </p>
+          )}
+          <form onSubmit={onSubmit} className="ad-form">
+            <label>Titre de l'annonce:</label>
+            <input
+              type="text"
+              name="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="form-input"
+            />
+            <br />
+            <br />
+            <label>Description de l'annonce:</label>
+            <input
+              type="text"
+              name="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="form-input"
+            />
+            <br />
+            <br />
+            <label>Lien de l'image:</label>
+            <input
+              type="text"
+              name="imgUrl"
+              value={imgUrl}
+              onChange={(e) => setImgUrl(e.target.value)}
+              className="form-input"
+            />
+            <br />
+            <br />
+            <label>Prix:</label>
+            <input
+              type="number"
+              name="price"
+              placeholder="0,00€"
+              value={price}
+              onChange={(e) => setPrice(Number(e.target.value))}
+              className="form-input"
+            />
+            <br />
+            <br />
+            <label>Catégorie:</label>
+            <select
+              name="categoryId"
+              value={categoryId + ""}
+              onChange={(e) => setCategoryId(Number(e.target.value))}
+              className="form-input"
+            >
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <br />
+            <br />
+            <button type="submit" disabled={loading} className="submit-button">
+              {props.ad ? "Modifier" : "Créer"}
+            </button>
+          </form>
+        </div>
       </main>
     </Layout>
   );

@@ -31,7 +31,6 @@ export function getAdQueryWhere(graphqlWhere?: AdsWhere): {
 
 @Resolver(Ad)
 export class AdsResolver {
-  @Authorized()
   @Query(() => [Ad])
   async allAds(
     @Arg("where", { nullable: true }) where?: AdsWhere,
@@ -71,7 +70,6 @@ export class AdsResolver {
   return ads;
 }
 
-  @Authorized()
   @Query(() => Ad, { nullable: true })
   async ad(@Arg("id", () => ID) id: number): Promise<Ad | null> {
     const ad = await Ad.findOne({
@@ -81,7 +79,6 @@ export class AdsResolver {
     return ad;
   }
 
-  @Authorized()
   @Query(() => Int)
   async allAdsCount(
     @Arg("where", { nullable: true }) where?: AdsWhere

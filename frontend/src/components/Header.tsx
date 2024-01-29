@@ -3,8 +3,11 @@ import React from "react"
 import { Category, CategoryType } from "./Categories";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { queryAllCategories } from "@/graphql/queryAllCategories";
+import { queryMe } from "@/graphql/queryMe";
+import { UserType } from "@/types";
+import { mutationLogout } from "@/graphql/mutationLogout";
 
 export function Header(): React.ReactNode {
   const [searchWord, setSearchWord] = useState("");
@@ -18,6 +21,16 @@ export function Header(): React.ReactNode {
     queryAllCategories
   );
   const categories = data ? data.items : [];
+
+  const { data: meData, error: meError } = useQuery<{ item: UserType | null }>(queryMe);
+  const me = meError ? undefined : meData?.item;
+
+  const [doLogout] = useMutation(mutationLogout, {
+    refetchQueries: [queryMe]
+  });
+  async function logout() {
+    doLogout();
+  }
 
   return (
     <header className="header">
@@ -49,6 +62,10 @@ export function Header(): React.ReactNode {
             </svg>
           </button>
         </form>
+        {me && <button onClick={logout} className="button link-button">
+          <span className="mobile-short-label">Deconnexion</span>
+          <span className="desktop-long-label">Deconnexion</span>
+        </button>}
         <Link href="/ads/new" className="button link-button">
           <span className="mobile-short-label">Publier</span>
           <span className="desktop-long-label">Publier une annonce</span>

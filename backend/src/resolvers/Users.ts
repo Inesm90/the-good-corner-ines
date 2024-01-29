@@ -50,6 +50,16 @@ export class UsersResolver {
     await newUser.save();
     return newUser;
   }
+  @Mutation(() => Boolean)
+  async logout(@Ctx() context: ContextType): Promise<boolean> {
+    const cookies = new Cookies(context.req, context.res);
+    cookies.set("token", "", {
+      httpOnly: true,
+      secure: false,
+      maxAge: 0,
+    });
+    return true;
+  }
 
   @Mutation(() => User, { nullable: true})
   async signin(
@@ -69,16 +79,14 @@ export class UsersResolver {
           process.env.JWT_SECRET || 'secret'
           );
 
-          //console.log(context)
           console.log(token)
 
           const cookies = new Cookies(context.req, context.res);
           cookies.set("token", token, {
             httpOnly: true,
-            secure: false,
+            secure: false, //prod : true
             maxAge: 1000 * 60 * 60 * 24,
           });          
-          //context.res.header("Set-Cookie", `token=${token}`);
 
           return existingUser;
         } else {
